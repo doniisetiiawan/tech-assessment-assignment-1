@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import sessionReducer, { type SessionState } from '../../features/session/store/session-slice';
-import catalogueReducer from './catalogue-slice';
-import purchaseReducer from './purchase-slice';
+import catalogueReducer, { type CatalogueState } from '../../features/catalogue/store/catalogue-slice';
+import purchaseReducer, { type PurchaseState } from './purchase-slice';
 
 export const store = configureStore({
   reducer: {
@@ -13,7 +13,7 @@ export const store = configureStore({
 
 export type RootState = {
   session: SessionState;
-  catalogue: ReturnType<typeof catalogueReducer>;
-  purchase: ReturnType<typeof purchaseReducer>;
+  catalogue: CatalogueState;
+  purchase: PurchaseState;
 };
 export type AppDispatch = typeof store.dispatch;

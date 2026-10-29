@@ -41,11 +41,11 @@
 
 ## Phase 3 — features/catalogue: model first (TDD)
 
-- [ ] Write FAILING tests: `filterProducts` (search + category) and `sortProducts` in `catalogue/model/filters.ts`
-- [ ] Implement pure functions until green (`vitest run`)
-- [ ] `catalogue/store/catalogue-slice.ts` — `items`, `status`, `search`, `category`, `sort` + `fetchProducts` thunk
-- [ ] `selectFilteredProducts` — memoized `createSelector` over `(items, search, category, sort)`
-- [ ] Wire dashboard to the selector
+- [x] Write FAILING tests: `filterProducts` (search + category) and `sortProducts` in `catalogue/model/filters.ts`
+- [x] Implement pure functions until green (`vitest run`)
+- [x] `catalogue/store/catalogue-slice.ts` — `items`, `status`, `search`, `category`, `sort` + `fetchProducts` thunk
+- [x] `selectFilteredProducts` — memoized `createSelector` over `(items, search, category, sort)`
+- [x] Wire dashboard to the selector
 
 **Budget:** ~30 min · **Done when:** `vitest run` green, dashboard filters/sort via Redux selector
 

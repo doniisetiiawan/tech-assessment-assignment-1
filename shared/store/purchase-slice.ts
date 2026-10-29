@@ -7,7 +7,7 @@ interface Selected {
   [key: string]: unknown;
 }
 
-interface PurchaseState {
+export interface PurchaseState {
   selected: Selected | null;
 }
 
