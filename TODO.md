@@ -8,9 +8,9 @@
 
 ## Phase 0 — Setup (before step 1)
 
-- [ ] Install the only new (dev) dependencies: `npm i -D vitest @testing-library/react @testing-library/jest-dom jsdom`
-- [ ] Add `vitest` script to `package.json` (`"test": "vitest run"`) — no custom config unless required
-- [ ] Confirm `npm run dev` still works (baseline screenshot at 380px + full width)
+- [x] Install the only new (dev) dependencies: `npm i -D vitest @testing-library/react @testing-library/jest-dom jsdom`
+- [x] Add `vitest` script to `package.json` (`"test": "vitest run"`) — no custom config unless required
+- [x] Confirm `npm run dev` still works (baseline screenshot at 380px + full width)
 
 **Budget:** ~10 min · **Packages:** vitest + RTL + jsdom (essential, dev-only)
 
