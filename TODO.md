@@ -53,10 +53,10 @@
 
 ## Phase 4 — features/catalogue: UI extraction
 
-- [ ] Extract dashboard monolith → `catalogue/components/`: `CataloguePage`, `ProductGrid`, `ProductCard`, `FilterTabs`
-- [ ] Introduce `shared/ui` atoms as encountered: `Button`, `Badge`, `Price`, `Spinner`, `Icon`
-- [ ] Introduce molecules: `SearchBar` (input + button), `EmptyState`
-- [ ] `catalogue/index.ts` public API; `app/page.tsx` becomes a thin route
+- [x] Extract dashboard monolith → `catalogue/components/`: `CataloguePage`, `ProductGrid`, `ProductCard`, `FilterTabs`
+- [x] Introduce `shared/ui` atoms as encountered: `Button`, `Badge`, `Price`, `Spinner`, `Icon`
+- [x] Introduce molecules: `SearchBar` (input + button), `EmptyState`
+- [x] `catalogue/index.ts` public API; `app/page.tsx` becomes a thin route
 
 **Budget:** ~40 min · **Done when:** dashboard composed from feature components + shared atoms, zero business logic in JSX
 
