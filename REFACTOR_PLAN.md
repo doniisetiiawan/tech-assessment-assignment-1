@@ -201,3 +201,111 @@ Per `fast-development.md`: each step uses what the stack already provides (RTK s
 1. **Product catalogue stays duplicated** — `purchase/api` keeps its own fetch rather than importing from `features/catalogue`. Unification would add a cross-feature export layer with no user-visible value inside the 2-hour MVP budget (Rules 5 & 6). Revisit when a 3rd feature needs products.
 2. **Wallet balance lives in `features/session`** — it is user state. `purchase` reads it via a selector exported from session's public API, keeping the buy flow a pure decision (`decidePurchase(price, balance, stock)`) with no cross-slice reducer wiring.
 3. **CSS extraction verified manually only** — no visual-regression tooling (violates Rule 5: config time > time saved). Manual check at 380px and full width; step 7 remains optional and is the first thing to drop if the deadline pressures.
+
+---
+
+## 8. Appendix — Atomic Design Mapping
+
+How `shared/ui` maps onto Atomic Design levels. Business-agnostic only — anything that knows about products/orders/balance is a feature component, not an atom.
+
+### Levels
+
+| Level | Location | Contents | Rule |
+|---|---|---|---|
+| **Atoms** | `shared/ui/atoms/` | `Button`, `Badge`, `Spinner`, `Icon`, `Price` | Smallest styled units; props in, DOM out; no data fetching, no store access |
+| **Molecules** | `shared/ui/molecules/` | `SearchBar` (input + button), `FormField`, `EmptyState` | Compose 2+ atoms into one interaction unit; still business-agnostic (props only) |
+| **Organisms** | `shared/ui/organisms/` | `Dialog` (focus trap + a11y), `Header`, `Footer` | Self-contained sections; may hold local state (e.g. dialog open) but never import features/store |
+
+### Composition flow (bottom-up)
+
+```
+atoms (Button, Price)
+   └── molecules (SearchBar = Input + Button)
+         └── organisms (Header = UserBadge slot + branding)
+               └── feature components (ProductCard, BuyButton = feature-flavored compositions)
+                     └── feature pages (CataloguePage, detail page)
+                           └── app routes
+```
+
+### Boundary rules
+
+- `shared/ui` never imports `features/*` or the store — data enters via props or `children` slots.
+- Atoms use design tokens (CSS custom properties in `globals.css`), never hardcoded colors/sizes — a token change propagates everywhere (docs best practice #1).
+- Feature components (e.g. `ProductCard`) are **not** atoms even if small: they encode business meaning. They may compose `shared/ui` atoms.
+- Feature-specific visuals (device art) stay in feature CSS; `shared/ui` owns only generic primitives.
+- Pages/templates level omitted: App Router routes are the pages; feature page components play the template role. Revisit when a 3rd distinct layout arrives (e.g. checkout) — see §4.
+
+### Examples of classification
+
+| Element | Level | Why |
+|---|---|---|
+| `<Price value={…}/>` | Atom | Formats + styles a number; no context |
+| `<SearchBar query onQueryChange/>` | Molecule | Two atoms, one behavior, props-driven |
+| `<Dialog open onClose>` | Organism | Focus trap, portal, local a11y state |
+| `<ProductCard product/>` | Feature component | Knows `Product` type → lives in `features/catalogue/components`, composes `atoms/Price` + `atoms/Badge` |
+
+---
+
+## 9. Appendix — Clean Architecture Layer Mapping
+
+How the target structure maps onto Clean Architecture. Note: layering is applied *inside* features (see §4), not as top-level directories.
+
+### Entities (Domain — innermost, depends on nothing)
+
+| Component | Location | Responsibility |
+|---|---|---|
+| `Product`, `User`, `Category`, `SortDirection` types | `features/*/model/types.ts` | Core data shapes |
+| `filterProducts` / `sortProducts` | `features/catalogue/model/filters.ts` | Pure catalogue rules |
+| `decidePurchase(price, balance, stock)` | `features/purchase/model/purchase.ts` | Buy rule → `'ok' \| 'insufficient_balance' \| 'out_of_stock'` |
+
+Imports nothing; unit-tested directly (TDD steps 3 & 5). ✅ Fully compliant.
+
+### Use Cases (Application)
+
+Not a separate class layer — deliberately pushed into RTK thunks + selectors:
+
+| Component | Location | Responsibility |
+|---|---|---|
+| `fetchProducts` / `buyProduct` / `fetchUser` thunks | `features/*/store/*-slice.ts` | Orchestrate one intention: call API → update slice |
+| `selectFilteredProducts` (`createSelector`) | catalogue slice | Read-side use case composing filter → sort entities |
+| purchase hook (implied) | `features/purchase/components/` | Binds `decidePurchase` to balance from session's public API |
+
+Imports Entities and Gateway interfaces. ✅ Points inward.
+
+### Interface Adapters
+
+- **Controllers:** `app/page.tsx`, `app/product/[id]/page.tsx` (thin routes); feature page components (dispatch + compose); `shared/store/hooks.ts` (typed `useAppSelector`/`useAppDispatch` — the React↔store boundary contract).
+- **Presenters:** selectors shaping store state for views (`selectFilteredProducts`).
+- **Repositories/Gateways:** `features/catalogue/api/products-api.ts`, `features/purchase/api/product-api.ts`, `features/session/api/user-api.ts` (mock fetch). Redux slices act as the app's "database"; composition root is `shared/store/store.ts`.
+
+### Frameworks & Drivers (Infrastructure / outermost)
+
+React 19 + Next.js App Router (`app/layout.tsx` mounts `<Provider>`), Redux Toolkit store, mock persistence (`setTimeout` simulation), `shared/ui` (atoms/molecules/organisms) + CSS.
+
+### Layer diagram
+
+```
+Infrastructure:  Next.js App Router · React · RTK store · mock API · shared/ui · CSS
+                     ▼ depends on
+Adapters:        routes + feature page components + typed hooks (controllers)
+                 selectors (presenters) · features/*/api/*.ts (gateways)
+                     ▼ depends on
+Use Cases:       fetchProducts · buyProduct · fetchUser (thunks) · selectFilteredProducts
+                     ▼ depends on
+Entities:        decidePurchase · filterProducts · sortProducts · types  (pure, no imports)
+```
+
+Request flow — buy:
+
+```
+Button (shared/ui) → dispatch buyProduct (use case) → purchase/api (gateway I/O)
+  → decidePurchase(price, balance, stock) [entity] → purchase-slice reducer
+  → selectors → React re-renders ResultDialog
+```
+
+### Known deviations & mitigations
+
+1. **No Gateway interfaces** — thunks import mock API modules directly. Cheap fix when a real API arrives: define `ProductsApi`/`PurchaseApi` interfaces per feature, inject via thunk arg. Accepted for MVP.
+2. **Duplicated product fetch** — `purchase/api` vs `catalogue/api` (Resolved Decision 1). Mitigate by promoting `Product` type to `shared/lib/types.ts` so only the fetch, not the contract, is duplicated.
+3. **Use cases implicit in thunks** — fine at 3 features; extract pure orchestrator into `model/` if buy logic grows (refunds, coupons).
+4. **Import rules convention-only** — `eslint-plugin-boundaries` deferred (§6); add when a 4th feature lands.
