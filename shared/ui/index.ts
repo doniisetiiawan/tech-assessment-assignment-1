@@ -1,5 +1,7 @@
-export { default as Button } from './Button';
-export { default as Badge } from './Badge';
-export { default as Price } from './Price';
-export { default as Spinner } from './Spinner';
-export { default as Icon } from './Icon';
+export { default as Button } from './atoms/Button';
+export { default as Badge } from './atoms/Badge';
+export { default as Price } from './atoms/Price';
+export { default as Spinner } from './atoms/Spinner';
+export { default as Icon } from './atoms/Icon';
+export { SearchBar, EmptyState } from './molecules';
+export { Dialog } from './organisms';

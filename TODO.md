@@ -85,6 +85,17 @@
 
 ---
 
+## Phase 7a — Plan alignment (code → match REFACTOR_PLAN §2)
+
+- [x] `features/catalogue/api/products-api.ts` — extract mock fetch from `fetchProducts` thunk (symmetry with purchase/session api/ layer)
+- [x] Move `shared/ui` atoms → `shared/ui/atoms/` (Button, Badge, Price, Spinner, Icon); update `shared/ui/index.ts` and all importers
+- [x] Split `catalogue/model/types.ts` out of `filters.ts` (`CatalogueProduct`, `SortOption`); re-export from feature index
+- [x] Verify: `npm run typecheck` + `vitest run` green, app unchanged
+
+**Budget:** ~20 min · **Done when:** folder structure matches Plan §2 tree exactly
+
+---
+
 ## Phase 7 — CSS extraction (OPTIONAL — first to drop under deadline)
 
 - [ ] Split `globals.css` → tokens/base stays global; per-component CSS files beside components

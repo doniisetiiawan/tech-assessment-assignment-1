@@ -1,20 +1,6 @@
-export interface ProductCore {
-  id: string;
-  name: string;
-  brand: string;
-  type: string;
-  price: number;
-}
+import type { ProductCore, SortOption } from './types';
 
-export interface CatalogueProduct extends ProductCore {
-  color: string;
-  tone: string;
-  tag?: string;
-  storage: string;
-  priceLabel: string;
-}
-
-export type SortOption = 'featured' | 'low' | 'high';
+export type { ProductCore, CatalogueProduct, SortOption } from './types';
 
 export function filterProducts(products: ProductCore[], category: string, search: string): ProductCore[] {
   const q = search.toLowerCase();

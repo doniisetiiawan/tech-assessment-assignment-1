@@ -1,5 +1,5 @@
 import { Search } from 'lucide-react';
-import Icon from '../Icon';
+import Icon from '../atoms/Icon';
 
 interface SearchBarProps {
   label?: string;
