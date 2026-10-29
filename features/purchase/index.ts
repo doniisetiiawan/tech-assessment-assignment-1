@@ -1,0 +1,10 @@
+export { default as DetailPage } from './components/DetailPage';
+export { default as BuyButton } from './components/BuyButton';
+export { default as SpecList } from './components/SpecList';
+export { default as ResultDialog } from './components/ResultDialog';
+export { fetchProduct, buyProduct, selectPurchase } from './store/purchase-slice';
+export type { PurchaseState } from './store/purchase-slice';
+export { fetchProductApi, buyApi } from './api/product-api';
+export type { ProductDetail, BuyResult } from './api/product-api';
+export { decidePurchase } from './model/purchase';
+export type { PurchaseDecision } from './model/purchase';

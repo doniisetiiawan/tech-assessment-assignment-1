@@ -64,12 +64,12 @@
 
 ## Phase 5 — features/purchase: model first (TDD), then UI
 
-- [ ] Write FAILING tests for `decidePurchase(price, balance, stock)`: out-of-stock → insufficient balance → ok
-- [ ] Implement in `purchase/model/purchase.ts` until green
-- [ ] `purchase/api/product-api.ts` — detail fetch + buy simulation (stays duplicated per Resolved Decision 1)
-- [ ] `purchase/store/purchase-slice.ts` — `order`, `status`; balance read via session's public selector
-- [ ] Extract detail page UI → `purchase/components/`: `BuyButton`, `SpecList`, `ResultDialog` usage
-- [ ] `purchase/index.ts` public API; `app/product/[id]/page.tsx` becomes a thin route
+- [x] Write FAILING tests for `decidePurchase(price, balance, stock)`: out-of-stock → insufficient balance → ok
+- [x] Implement in `purchase/model/purchase.ts` until green
+- [x] `purchase/api/product-api.ts` — detail fetch + buy simulation (stays duplicated per Resolved Decision 1)
+- [x] `purchase/store/purchase-slice.ts` — `order`, `status`; balance read via session's public selector
+- [x] Extract detail page UI → `purchase/components/`: `BuyButton`, `SpecList`, `ResultDialog` usage
+- [x] `purchase/index.ts` public API; `app/product/[id]/page.tsx` becomes a thin route
 
 **Budget:** ~40 min · **Done when:** `vitest run` green, buy flow unchanged end-to-end
 
