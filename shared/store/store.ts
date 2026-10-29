@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import sessionReducer from './session-slice';
+import sessionReducer, { type SessionState } from '../../features/session/store/session-slice';
 import catalogueReducer from './catalogue-slice';
 import purchaseReducer from './purchase-slice';
 
@@ -11,5 +11,9 @@ export const store = configureStore({
   },
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = {
+  session: SessionState;
+  catalogue: ReturnType<typeof catalogueReducer>;
+  purchase: ReturnType<typeof purchaseReducer>;
+};
 export type AppDispatch = typeof store.dispatch;

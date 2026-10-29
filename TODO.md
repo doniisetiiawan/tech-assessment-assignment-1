@@ -30,10 +30,10 @@
 
 ## Phase 2 — features/session (prove the pattern)
 
-- [ ] `session/api/user-api.ts` — extract mock user fetch from `app/page.tsx`
-- [ ] `session/store/session-slice.ts` — `user`, `balance` + `fetchUser` thunk
-- [ ] `session/components/UserBadge.tsx` — extract header UI
-- [ ] `session/index.ts` — public API (component, selectors, types)
+- [x] `session/api/user-api.ts` — extract mock user fetch from `app/page.tsx`
+- [x] `session/store/session-slice.ts` — `user`, `balance` + `fetchUser` thunk
+- [x] `session/components/UserBadge.tsx` — extract header UI
+- [x] `session/index.ts` — public API (component, selectors, types)
 
 **Budget:** ~20 min · **Done when:** header renders identically from the feature's public API
 

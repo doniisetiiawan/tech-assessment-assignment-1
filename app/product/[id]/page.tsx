@@ -4,12 +4,12 @@ import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Check, ShieldCheck, Truck, LoaderCircle, Smartphone, Cpu, Camera, Battery, HardDrive, Monitor, CircleAlert } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../../shared/store/hooks';
 import { setSelected } from '../../../shared/store/purchase-slice';
-import { addOrder } from '../../../shared/store/session-slice';
+import { addOrder, selectWalletBalance } from '../../../features/session/index';
 
 export default function Detail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const dispatch = useAppDispatch();
-  const balance = useAppSelector(state => state.session.walletBalance);
+  const balance = useAppSelector(selectWalletBalance);
   const [p, setP] = useState<any>(null);
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<any>(null);
