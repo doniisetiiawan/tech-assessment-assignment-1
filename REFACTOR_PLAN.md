@@ -180,7 +180,7 @@ Per `fast-development.md`: each step uses what the stack already provides (RTK s
 2. **`features/session`** — extract mock user API → slice + `<UserBadge>`. Small feature, proves the pattern. *(20 min)*
 3. **`features/catalogue` model first (TDD)** — write failing tests for `filterProducts`/`sortProducts`, make green, wire `selectFilteredProducts` into dashboard. *(30 min)*
 4. **`features/catalogue` UI** — extract dashboard monolith into feature components; introduce `shared/ui` atoms as they're encountered (Button, Badge, Price, SearchBar…). *(40 min)*
-5. **`features/purchase` model first (TDD)** — `decidePurchase` tests (out-of-stock, insufficient, ok) before moving `buy()`; then extract detail page UI, reuse single product source (kill the duplicated catalogue). *(40 min)*
+5. **`features/purchase` model first (TDD)** — `decidePurchase` tests (out-of-stock, insufficient, ok) before moving `buy()`; then extract detail page UI (product source stays duplicated in `purchase/api` per Resolved Decision 1). *(40 min)*
 6. **Dialog organism** — extract focus trap into `shared/ui/organisms/Dialog`; smoke-test both flows manually + one RTL test. *(20 min)*
 7. **CSS extraction** — split `globals.css` into tokens/base + component files. Verify visually at 380px width. *(flex / optional)*
 
@@ -196,8 +196,8 @@ Per `fast-development.md`: each step uses what the stack already provides (RTK s
 
 ---
 
-## 7. Open Questions
+## 7. Resolved Decisions
 
-1. Should the duplicated product catalogue be unified into `features/catalogue/api` and imported by `purchase` via its public API — or kept duplicated per the strict "features never import features" rule? (Plan assumes: strict rule; duplicate the fetch.)
-2. Does wallet balance belong to `session` (it's user state) rather than `purchase`? Plan assumes **yes** — `purchase` reads balance via a `session` selector exported from its index.
-3. Is a visual-regression check required for the CSS extraction step, or is manual verification at 380px sufficient for the assignment?
+1. **Product catalogue stays duplicated** — `purchase/api` keeps its own fetch rather than importing from `features/catalogue`. Unification would add a cross-feature export layer with no user-visible value inside the 2-hour MVP budget (Rules 5 & 6). Revisit when a 3rd feature needs products.
+2. **Wallet balance lives in `features/session`** — it is user state. `purchase` reads it via a selector exported from session's public API, keeping the buy flow a pure decision (`decidePurchase(price, balance, stock)`) with no cross-slice reducer wiring.
+3. **CSS extraction verified manually only** — no visual-regression tooling (violates Rule 5: config time > time saved). Manual check at 380px and full width; step 7 remains optional and is the first thing to drop if the deadline pressures.
