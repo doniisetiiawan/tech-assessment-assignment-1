@@ -77,9 +77,9 @@
 
 ## Phase 6 — Dialog organism
 
-- [ ] Extract focus trap + a11y into `shared/ui/organisms/Dialog` (no feature/store imports)
-- [ ] One RTL smoke test (open/close, focus trapped)
-- [ ] Manual smoke test: both purchase outcomes (success dialog, error dialog)
+- [x] Extract focus trap + a11y into `shared/ui/organisms/Dialog` (no feature/store imports)
+- [x] One RTL smoke test (open/close, focus trapped)
+- [x] Manual smoke test: both purchase outcomes (success dialog, error dialog)
 
 **Budget:** ~20 min · **Done when:** both flows verified manually + 1 passing RTL test
 
