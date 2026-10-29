@@ -1,6 +1,16 @@
+# Dependencies
 node_modules/
+
+# Next.js
 .next/
 out/
-*.tsbuildinfo
 next-env.d.ts
+
+# TypeScript
+*.tsbuildinfo
+
+# Environment Variables
 .env*
+
+# AI Agents
+AGENTS.md
