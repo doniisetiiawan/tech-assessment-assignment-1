@@ -1,13 +1,15 @@
 'use client';
 import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useDispatch, useSelector } from 'react-redux';
 import { ArrowLeft, ArrowRight, Check, ShieldCheck, Truck, LoaderCircle, Smartphone, Cpu, Camera, Battery, HardDrive, Monitor, CircleAlert } from 'lucide-react';
+import { useAppDispatch, useAppSelector } from '../../../shared/store/hooks';
+import { setSelected } from '../../../shared/store/purchase-slice';
+import { addOrder } from '../../../shared/store/session-slice';
 
 export default function Detail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const dispatch = useDispatch();
-  const balance = useSelector((state: any) => state.walletBalance);
+  const dispatch = useAppDispatch();
+  const balance = useAppSelector(state => state.session.walletBalance);
   const [p, setP] = useState<any>(null);
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<any>(null);
@@ -29,7 +31,7 @@ export default function Detail({ params }: { params: Promise<{ id: string }> }) 
       const row = db.find(x => x[0] === id);
       if (!row) { reject(new Error('We couldn’t find that device.')); return; }
       resolve({ id: row[0], name: row[1], brand: row[2], type: row[3], price: row[4], color: row[5], tone: row[6], storage: row[7], screen: row[8], chip: row[9], camera: row[10], battery: row[11], os: row[12], stock: 12 });
-    }, 600)).then(data => { if (mounted) { setP(data); dispatch({ type: 'SELECTED', payload: data }); } }).catch(e => { if (mounted) setErr(e.message); }).finally(() => { if (mounted) setLoading(false); });
+    }, 600)).then(data => { if (mounted) { setP(data); dispatch(setSelected(data)); } }).catch(e => { if (mounted) setErr(e.message); }).finally(() => { if (mounted) setLoading(false); });
     return () => { mounted = false; };
   }, [id, dispatch]);
   useEffect(() => {
@@ -51,7 +53,7 @@ export default function Detail({ params }: { params: Promise<{ id: string }> }) 
         if (p.price > balance) { resolve({ status: 'insufficient_balance' }); return; }
         resolve({ order_id: 'ORB-' + Date.now().toString().slice(-8), product_id: p.id, total: p.price, status: 'success' });
       }, 1100));
-      if (result.status === 'success') dispatch({ type: 'ORDER', payload: result });
+      if (result.status === 'success') dispatch(addOrder(result));
       setDone(result);
     } catch (e) { setErr(e instanceof Error ? e.message : 'Purchase failed. Please try again.'); }
     finally { setBusy(false); }

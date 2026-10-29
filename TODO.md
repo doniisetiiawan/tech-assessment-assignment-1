@@ -18,11 +18,11 @@
 
 ## Phase 1 — Skeleton + Typed Store (was: provider.tsx)
 
-- [ ] Create folder structure: `features/{catalogue,purchase,session}/{api,model,store,components}` + `shared/{store,ui,lib}`
-- [ ] `shared/store/store.ts` — `configureStore` with three slices (`session`, `catalogue`, `purchase`), export `RootState` / `AppDispatch`
-- [ ] `shared/store/hooks.ts` — `useAppDispatch` / `useAppSelector` (removes all `state: any`)
-- [ ] Convert string-switch reducer in `app/provider.tsx` → `createSlice`; delete `provider.tsx`, mount `<Provider>` in `app/layout.tsx`
-- [ ] Move `sort` state INTO Redux (`catalogue` slice)
+- [x] Create folder structure: `features/{catalogue,purchase,session}/{api,model,store,components}` + `shared/{store,ui,lib}`
+- [x] `shared/store/store.ts` — `configureStore` with three slices (`session`, `catalogue`, `purchase`), export `RootState` / `AppDispatch`
+- [x] `shared/store/hooks.ts` — `useAppDispatch` / `useAppSelector` (removes all `state: any`)
+- [x] Convert string-switch reducer in `app/provider.tsx` → `createSlice`; delete `provider.tsx`, mount `<Provider>` in `app/layout.tsx`
+- [x] Move `sort` state INTO Redux (`catalogue` slice)
 
 **Budget:** ~30 min · **Done when:** app runs unchanged, store fully typed, no `any` in selectors
 
