@@ -1,6 +1,12 @@
 import { createAsyncThunk, createSlice, createSelector } from '@reduxjs/toolkit';
-import { fetchCatalogueProducts } from '../api/products-api';
-import { filterProducts, sortProducts, type CatalogueProduct, type SortOption } from '../model/filters';
+import { filterProducts, sortProducts } from '../domain/filters';
+import type { CatalogueProduct, SortOption } from '../domain/types';
+import type { ProductRepository } from './ports/product-repository';
+
+// Injected via composition root (shared/store/store.ts) — never imported directly.
+export interface ThunkApi {
+  catalogueProducts: ProductRepository;
+}
 
 export interface CatalogueState {
   products: CatalogueProduct[];
@@ -18,7 +24,10 @@ const initialState: CatalogueState = {
   sort: 'featured',
 };
 
-export const fetchProducts = createAsyncThunk('catalogue/fetchProducts', () => fetchCatalogueProducts());
+export const fetchProducts = createAsyncThunk(
+  'catalogue/fetchProducts',
+  (_: void, { extra }) => (extra as ThunkApi).catalogueProducts.fetchCatalogue()
+);
 
 const catalogueSlice = createSlice({
   name: 'catalogue',

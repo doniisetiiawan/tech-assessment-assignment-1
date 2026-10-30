@@ -1,10 +1,11 @@
-export { default as DetailPage } from './components/DetailPage';
-export { default as BuyButton } from './components/BuyButton';
-export { default as SpecList } from './components/SpecList';
-export { default as ResultDialog } from './components/ResultDialog';
-export { fetchProduct, buyProduct, selectPurchase } from './store/purchase-slice';
-export type { PurchaseState } from './store/purchase-slice';
-export { fetchProductApi, buyApi } from './api/product-api';
-export type { ProductDetail, BuyResult } from './api/product-api';
-export { decidePurchase } from './model/purchase';
-export type { PurchaseDecision } from './model/purchase';
+// Public API of the purchase feature. Presentation + application only.
+export { default as DetailPage } from './presentation/DetailPage';
+export { default as BuyButton } from './presentation/BuyButton';
+export { default as SpecList } from './presentation/SpecList';
+export { default as ResultDialog } from './presentation/ResultDialog';
+export { fetchProduct, buyProduct, selectPurchase } from './application/purchase-slice';
+export type { PurchaseState } from './application/purchase-slice';
+export { decidePurchase } from './domain/purchase';
+export type { PurchaseDecision } from './domain/purchase';
+export type { ProductDetail } from './domain/product';
+export { LocalProductRepository } from './infrastructure/product-repository';

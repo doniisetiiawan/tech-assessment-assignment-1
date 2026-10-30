@@ -1,7 +1,7 @@
 import { Monitor, Cpu, Camera, Battery, HardDrive, Smartphone } from 'lucide-react';
 import { Icon } from '../../../shared/ui';
 import type { LucideIcon } from 'lucide-react';
-import type { ProductDetail } from '../api/product-api';
+import type { ProductDetail } from '../domain/product';
 
 interface SpecRow {
   icon: LucideIcon;

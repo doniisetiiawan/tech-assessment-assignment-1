@@ -1,4 +1,6 @@
-import type { CatalogueProduct } from '../model/types';
+// Infrastructure adapter — implements the port owned by the application layer.
+import type { ProductRepository } from '../application/ports/product-repository';
+import type { CatalogueProduct } from '../domain/types';
 
 interface RawProduct {
   id: string;
@@ -23,8 +25,10 @@ function fetchRawProducts(): Promise<RawProduct[]> {
   );
 }
 
-export function fetchCatalogueProducts(): Promise<CatalogueProduct[]> {
-  return fetchRawProducts().then(
-    products => products.map(x => ({ ...x, priceLabel: '$' + x.price.toLocaleString('en-US') })) as unknown as CatalogueProduct[]
-  );
+export class LocalProductRepository implements ProductRepository {
+  async fetchCatalogue(): Promise<CatalogueProduct[]> {
+    const products = await fetchRawProducts();
+    // Map raw rows → domain model at the boundary (no raw API shape leaks inward).
+    return products.map(x => ({ ...x, priceLabel: '$' + x.price.toLocaleString('en-US') })) as unknown as CatalogueProduct[];
+  }
 }

@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { Badge, Price, Icon } from '../../../shared/ui';
-import type { CatalogueProduct } from '../model/filters';
+import type { CatalogueProduct } from '../domain/types';
 
 export default function ProductCard({ product }: { product: CatalogueProduct }) {
   const p = product;

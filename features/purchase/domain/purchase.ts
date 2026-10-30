@@ -1,3 +1,4 @@
+// Domain rule — pure function, fully unit-testable without any framework.
 export type PurchaseDecision =
   | { status: 'out_of_stock' }
   | { status: 'insufficient_balance' }

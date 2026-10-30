@@ -1,9 +1,11 @@
-export { default as CataloguePage } from './components/CataloguePage';
-export { default as ProductGrid } from './components/ProductGrid';
-export { default as ProductCard } from './components/ProductCard';
-export { default as FilterTabs } from './components/FilterTabs';
-export { fetchProducts, setSearch, setCategory, setSort, selectCatalogue, selectFilteredProducts } from './store/catalogue-slice';
-export type { CatalogueState } from './store/catalogue-slice';
-export { filterProducts, sortProducts } from './model/filters';
-export type { CatalogueProduct, ProductCore, SortOption } from './model/filters';
-export { default } from './store/catalogue-slice';
+// Public API of the catalogue feature. Presentation + application only.
+export { default as CataloguePage } from './presentation/CataloguePage';
+export { default as ProductGrid } from './presentation/ProductGrid';
+export { default as ProductCard } from './presentation/ProductCard';
+export { default as FilterTabs } from './presentation/FilterTabs';
+export { fetchProducts, setSearch, setCategory, setSort, selectCatalogue, selectFilteredProducts } from './application/catalogue-slice';
+export type { CatalogueState } from './application/catalogue-slice';
+export { filterProducts, sortProducts } from './domain/filters';
+export type { CatalogueProduct, ProductCore, SortOption } from './domain/types';
+export { LocalProductRepository } from './infrastructure/product-repository';
+export { default } from './application/catalogue-slice';

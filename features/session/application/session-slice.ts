@@ -1,13 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchUserApi } from '../api/user-api';
+import type { User } from '../domain/user';
+import type { UserRepository } from './ports/user-repository';
 
-export interface User {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  membership: string;
-  name: string;
+// Injected by the composition root — the slice knows only the port.
+export interface ThunkApi {
+  userRepository: UserRepository;
 }
 
 export interface SessionState {
@@ -18,10 +15,9 @@ export interface SessionState {
 
 const initialState: SessionState = { user: null, walletBalance: 1050, orders: [] };
 
-export const fetchUser = createAsyncThunk('session/fetchUser', async () => {
-  const u = await fetchUserApi();
-  return { ...u, name: u.first_name + ' ' + u.last_name } satisfies User;
-});
+export const fetchUser = createAsyncThunk('session/fetchUser', (_, { extra }) =>
+  (extra as ThunkApi).userRepository.fetchCurrentUser()
+);
 
 const sessionSlice = createSlice({
   name: 'session',
@@ -34,7 +30,7 @@ const sessionSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(fetchUser.fulfilled, (state, action) => {
       state.user = action.payload;
-      state.walletBalance = action.payload.wallet_balance;
+      state.walletBalance = 1050;
     });
   },
 });

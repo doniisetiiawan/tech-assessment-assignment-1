@@ -1,7 +1,7 @@
 'use client';
 import { Sparkles } from 'lucide-react';
 import { useAppSelector } from '../../../shared/store/hooks';
-import { selectUser, selectWalletBalance } from '../store/session-slice';
+import { selectUser, selectWalletBalance } from '../application/session-slice';
 
 export default function UserBadge() {
   const user = useAppSelector(selectUser);
@@ -13,7 +13,7 @@ export default function UserBadge() {
         <div>
           <div className="welcome-label">YOUR PERSONAL SPACE</div>
           <h2>
-            Welcome back, {user?.first_name || 'Alex'} <span className="wave">✳</span>
+            Welcome back, {user?.firstName || 'Alex'} <span className="wave">✳</span>
           </h2>
           <p>{user?.email || 'Getting your profile ready…'}</p>
         </div>

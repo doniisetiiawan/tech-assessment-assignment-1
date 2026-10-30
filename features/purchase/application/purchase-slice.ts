@@ -1,24 +1,34 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchProductApi, buyApi, type ProductDetail, type BuyResult } from '../api/product-api';
-import type { RootState } from '../../../shared/store/store';
+import type { ProductDetail } from '../domain/product';
+import type { PurchaseDecision } from '../domain/purchase';
+import type { ProductRepository } from './ports/product-repository';
+
+// Dependencies injected by the composition root — the slice knows only the port.
+export interface ThunkApi {
+  purchaseProducts: ProductRepository;
+}
 
 export interface PurchaseState {
   selected: ProductDetail | null;
-  order: BuyResult | null;
+  order: PurchaseDecision | null;
   status: 'idle' | 'loading-detail' | 'buying' | 'ready' | 'not-found';
   error: string;
 }
 
 const initialState: PurchaseState = { selected: null, order: null, status: 'idle', error: '' };
 
-export const fetchProduct = createAsyncThunk('purchase/fetchProduct', (id: string) => fetchProductApi(id));
+export const fetchProduct = createAsyncThunk('purchase/fetchProduct', (id: string, { extra }) =>
+  (extra as ThunkApi).purchaseProducts.findById(id)
+);
 
-export const buyProduct = createAsyncThunk('purchase/buy', async (_, { getState }) => {
-  const root = getState() as RootState;
-  const product = root.purchase.selected;
-  if (!product) throw new Error('No device selected.');
-  return buyApi(product, root.session.walletBalance);
-});
+export const buyProduct = createAsyncThunk<PurchaseDecision, void, { state: { purchase: PurchaseState; session: { walletBalance: number } } }>(
+  'purchase/buy',
+  async (_, { getState, extra }) => {
+    const product = getState().purchase.selected;
+    if (!product) throw new Error('No device selected.');
+    return (extra as ThunkApi).purchaseProducts.buy(product, getState().session.walletBalance);
+  }
+);
 
 const purchaseSlice = createSlice({
   name: 'purchase',
